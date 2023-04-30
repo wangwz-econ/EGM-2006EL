@@ -1,0 +1,230 @@
+\documentclass[12pt]{article}
+
+% DEFAULT PACKAGE SETUP
+\usepackage{setspace,graphicx,epstopdf,amsmath,amsfonts,amssymb,amsthm,geometry}
+\usepackage{marginnote,datetime,enumitem,rotating,fancyvrb}
+\usepackage{threeparttable,float,soul,booktabs}
+\usdate
+\geometry{scale=0.8}
+
+% FONT
+\usepackage{xeCJK,fontspec} 
+\setCJKmainfont{KaiTi}
+\setCJKmonofont{SimSun} 
+%\usepackage{newtxtext,newtxmath} % Times New Roman
+%\usepackage{newpxtext,newpxmath} % Too Slim
+%\usepackage{fouriernc} 		  % Too Curved
+\usepackage{fourier}    		  % Favourite Font
+
+%% Use natbib.sty.
+\usepackage{natbib,fancybox,url,graphicx,color}
+\definecolor{MyBlue}{rgb}{0,0.2,0.6}
+\definecolor{MyRed}{rgb}{0.4,0,0.1}
+\definecolor{MyGreen}{rgb}{0,0.4,0}
+\usepackage[bookmarks=true,bookmarksnumbered=true,colorlinks=true,linkcolor=MyBlue,citecolor=MyRed,filecolor=MyBlue,urlcolor=MyGreen]{hyperref}
+
+\usdate
+\geometry{scale=0.8}
+
+%% Use natbib.sty.
+\usepackage{natbib,fancybox,url,graphicx,color}
+\definecolor{MyBlue}{rgb}{0,0.2,0.6}
+\definecolor{MyRed}{rgb}{0.4,0,0.1}
+\definecolor{MyGreen}{rgb}{0,0.4,0}
+\usepackage[bookmarks=true,bookmarksnumbered=true,colorlinks=true,linkcolor=MyBlue,citecolor=MyRed,filecolor=MyBlue,urlcolor=MyGreen]{hyperref}
+\bibliographystyle{aer}
+
+%% Theorem Environment
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}{Definition} % Number definitions on their own
+\newtheorem{derivation}{Derivation} % Number derivations on their own
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}{Proposition} % Number propositions on their own
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\begin{document}
+\title{\bf {The Method of Endogenous Gridpoints for Solving Dynamic Stochastic Optimization Problems, Economics Letters, 2006}}
+\author{Summarized by Wenzhi Wang \thanks{This note is written down during my M.phil. period at the University of Oxford. } }
+\date{\today}
+
+\maketitle
+
+\section{The Problem}
+Consider a consumer whose goal is to maximize discounted utility from consumption
+\begin{equation}
+	\label{1}
+	\max \sum_{s=t}^T \beta^{s-t}u(C_s)
+\end{equation}
+for a CRRA utility function $u(C) = \frac{C^{1-\rho}}{1-\rho}$.
+
+This problem will be specialized below to two cases: a standard micro-economic problem with uninsurable idiosyncratic shocks to labor income, and a standard representative agent problem with shocks to aggregate productivity.
+
+The consumer's initial conditional is defined by two state variables: $M_t$ is `market resources' (macro: capital plus current output) or `cash on hand' (micro: net worth plus current income), while $P_t$ is permanent labor productivity in both interpretations.
+
+The transition process for $M_t$ is broken up into three steps. Assets at the end of the period are market resources minus consumption, equal to 
+\begin{equation}
+	\label{2}
+	A_t = M_t - C_t
+\end{equation}
+and capital at the beginning of the next period is what remains after a depreciation factor $\varphi$ is applied,
+\begin{equation}
+	\label{3}
+	K_{t+1} = A_t \varphi
+\end{equation}
+where $\varphi = 1 - \delta$ in the usual macro notation and $\varphi = 1$ in the micro interpretation. The final step can be thought of as the transition from the beginning of period $t+1$, when capital $K_{t+1}$ but has not yet been used to produce output, and the middle of that period, when output was produced and incorporated into resources:
+\begin{equation}
+	\label{4}
+	M_{t+1}=\overbrace{e_{t+1} \Theta_{t+1} P_{t+1}}^{\equiv L_{t+1}} W_{t+1}+K_{t+1} R_{t+1}
+\end{equation}
+where $W_{t+1}$ is the wage rate; $\Theta_{t+1}$ is an iid transitory shock normalized to satisfy $E_t \left[\Theta_{t+n}\right] = 1, \forall n > 0$ (usually $\Theta_t = 1, \forall t$ in the macro interpretation); and $e_t$ indicates labor effort (or labor supply), which for purposes of this paper is fixed at $e_t=1$, but in general could be allowed to vary. The disarticulation of the flow of income into labor and capital components is useful in thinking separately about the effects of productivity growth (captured by $\Theta P$) and capital accumulation ($K$).
+
+Permanent labor productivity evolves according to 
+\begin{equation}
+	\label{5}
+	P_{t+1} = G_{t+1}P_t \Psi_{t+1} 
+\end{equation}
+for a permanent shock that satisfies $E_t\left[\Psi_{t+n}\right] = 1, \forall n > 0$ and $G_t$ is exogenous and perfectly predictable.
+
+Defining lower case variables as the upper-case variable scaled by the level of permanent labor productivity, e.g., $a_t = \frac{A_t}{P_t}$, we have
+\begin{equation}
+	\label{6}
+	a_t = m_t - c_t
+\end{equation}
+while the state transition becomes
+\begin{equation}
+	\label{7}
+	m_{t+1}=\underbrace{e_t \Theta_{t+1}}_{=l_{t+1}} W_{t+1}+\underbrace{\left( \frac{a_t \varphi}{G_{t+1} \Psi_{t+1}} \right)}_{=k_{t+1}} R_{t+1}
+\end{equation}
+
+The interest and wage factors are assumed not to depend on anything other than capital and productive labor input; together with the iid assumption about the structure of the shocks, this implies that the problem has a Bellman equation representation (henceforth boldface indicates functions)
+\begin{equation}
+	\label{8}
+	\mathbf{V}_t\left(M_t, P_t\right)=\max _{C_t}\bigl\{u\left(C_t\right)+\beta E_t\left[\mathbf{V}_{t+1}\left(M_{t+1}, P_{t+1}\right)\right]\bigl\}
+\end{equation}
+subject to the transition equations.
+
+Defining $\Lambda_{t+1} = G_{t+1}\Psi_{t+1}$, consider the related problem
+\begin{equation}
+	\label{9}
+	\mathbf{v}_t\left(m_t\right)=\max _{c_t}\left\{u\left(c_t\right)+\beta E_t\left[\Lambda_{t+1}^{1-\rho} \mathbf{v}_{t+1}\left( \overbrace{W_{t+1} l_{t+1}+R_{t+1} \underbrace{\left( \frac{a_t \varphi }{\Lambda_{t+1}} \right)}_{k_{t+1}}}^{=m_{t+1}}\right) \right]\right\} .
+\end{equation}
+Assume that there is some last period $T$ in which 
+\begin{equation}
+	\label{10}
+	\mathbf{V}_T\left(M_T, P_T\right)=P_T^{1-\rho} \mathbf{v}_T\left( \frac{M_T}{P_T}\right)
+\end{equation}
+for some well-behaved $\mathbf{v}_T$. In this case, it is easy to show that the solution to the normalized problem defined by Equation \ref{9} yields the solution to the original problem via $\mathbf{V}_t = P_t^{1-\rho}\mathbf{v}_t$ for any $t<T$.
+
+Now define an end-of-period value function 
+\begin{equation}
+	\label{11}
+	\boldsymbol{\mathfrak{v}}_t\left(a_t\right)=\beta E_t\left[\Lambda_{t+1}^{1-\rho} \mathbf{v}_{t+1}\left(W_{t+1} l_{t+1}+ R_{t+1} \frac{a_t \varphi }{\Lambda_{t+1}} \right)\right]
+\end{equation}
+with derivative
+\begin{equation}
+	\label{12}
+	\begin{aligned}
+		\boldsymbol{\mathfrak{v}}_t^a\left(a_t\right) & =\beta E_t\left[\Lambda_{t+1}^{1-\rho} \mathbf{v}_{t+1}^m\left(W_{t+1} l_{t+1}+\frac{R_{t+1} a_t \varphi }{\Lambda_{t+1}}\right) \frac{R_{t+1} \varphi }{\Lambda_{t+1}}\right] \\
+		& =\varphi \beta E_t\left[\Lambda_{t+1}^{-\rho} \mathbf{v}_{t+1}^m\left(W_{t+1} l_{t+1}+\frac{R_{t+1} a_t \varphi }{\Lambda_{t+1}}\right) R_{t+1}\right] 
+	\end{aligned}
+\end{equation}
+and Equations \ref{11} and \ref{6} imply that Equation \ref{9} can be written using $\mathbf{v}_t$ as
+\begin{equation}
+	\label{13} 
+	\mathbf{v}_t\left(m_t\right)=\max _{\left\{a_t\right\}}\bigl\{u\left(m_t-a_t\right)+\boldsymbol{\mathfrak{v}}_t\left(a_t\right)\bigl\}
+\end{equation}
+and the Envelope Theorem can be applied
+\begin{equation}
+	\label{14}
+	\mathbf{v}_t^m(m_t) = u^\prime(c_t)
+\end{equation}
+while the FOC yields the Euler Equation
+\begin{equation}
+	\label{15}
+	u^{\prime}\left(c_t\right)=\boldsymbol{\mathfrak{v}}_t^a\left(a_t\right)=\varphi \beta E_t\left[u^{\prime}\left(\Lambda_{t+1} c_{t+1}\right) R_{t+1}\right]
+\end{equation}
+
+\section{Recursion}
+\subsection{A Standard Solution Method}
+The absence of a closed-form solution means that optimal decision functions (e.g. the consumption function) must be constructed by calculating their values at a finite grid of possible values of the state variables. Call some ordered set of such values $\mu_i \in \overrightarrow{\mu} \equiv \{\mu_1, \mu_2, \ldots, \mu_I\} $.
+
+With $c_{t+1}$ in hand, the usual solution procedure is to specify a $\overrightarrow{\mu}$ and, for each element $\mu_i$, to use a numerical root-finding routine to find the $\chi_i$ that satisfies Equation \ref{15},
+\begin{equation}
+	\label{16}
+	u^{\prime}\left(\chi_i\right)=\boldsymbol{\mathfrak{v}}^a_t\left(\mu_i-\chi_i\right)
+\end{equation}
+
+The points $\{\mu_i, \chi_i\}$ are then used to construct an interpolating approximation to $c_t$. Given the interpolated $c_t$ function the solution for earlier periods is found by recursion.
+
+One of the most computationally burdensome steps in this approach is the numerical solution of Eq. (16) for each specified state grid point.
+
+\subsection{Endogenous Gridpoints Solution Method}
+
+This paper's key contribution is to introduce an alternative approach that does not require numerical root-finding. The trick is to begin with end-of-period assets at and to use the end-of-period marginal value function $\mathbf{v}_t^a$ ,the first order condition, and the budget constraint to construct the unique values of middle-of-period $m_t$ generated by those at values.
+
+Specifically, define an exogenous, time-invariant ordered set of values of $a_t$ collected in $\alpha \in \overrightarrow{\alpha} \equiv \{\alpha_1, \ldots, \alpha_I\}$. For each end-of-period state $\alpha_i$ the marginal value $\boldsymbol{\mathfrak{v}}_t^a(\alpha_i)$ is easy to calculate; inverting the consumption first order condition, the $\alpha$'s generate 
+\begin{equation}
+	\label{17}
+	\chi_i=u^{\prime-1}\left(\boldsymbol{\mathfrak{v}}_t^a\left(\alpha_i\right)\right)
+\end{equation}
+
+Note that the budget constraint implies that 
+\begin{equation}
+	\label{18}
+	u_i = \alpha_i + \chi_i.
+\end{equation}
+
+We now have a collection of $\{\mu_i, \chi_i\}$ pairs in hand and can interpolate as before to generate an approximation to $c_t$. This completes the recursion.
+
+The key distinction between this approach and the standard one is that the gridpoints for the policy functions are not predetermined; instead they are endogenously generated from a predetermined grid of values of end-of-period assets (hence the method's name). One reason the method is efficient is that expectations are never computed for any grid-point not used in the final interpolating function; the standard method may compute expectations for many unused gridpoints.
+
+\section{Macro Specialization}
+Assuming aggregate production is $F(K, P) = K^\varepsilon P^{1-\varepsilon}$, after normalizing by productivity $P$ (and assuming a constant value $G$ for labor productivity growth factor), under the usual assumptions of perfect competition, etc., if there is no aggregate transitory shock ($\Theta_{t+1} = 1$) we have 
+\begin{equation}
+	\label{19}
+	R_{t+1} = 1 + \varepsilon k_{t+1}^{\varepsilon-1}
+\end{equation}
+\begin{equation}
+	\label{20}
+	W_{t+1} = (1- \varepsilon)k_{t+1}^{\varepsilon}
+\end{equation}
+and market resources are the sum of capital and production
+\begin{equation}
+	\label{2122}
+	m_{t+1} = k_{t+1}R_{t+1} + W_{t+1} = k_{t+1} + k_{t+1}^{\varepsilon}.
+\end{equation}
+We specify the terminal consumption function as 
+\begin{equation}
+	\label{23}
+	c_T(m) = m,
+\end{equation}
+which is very far from the converged infinite horizon consumption rule, but easy to verify as satisfying the assumption \ref{10} imposed earlier.
+
+An arbitrary specification of the process for permanent productivity shocks is a three point distribution defined by $\overrightarrow{\Phi} = \{0.9, 1.0, 1.1\}$ with probabilities $\{0.25, 0.50, 0.25\}$.
+
+Matlab Codes for this simple stochastic growth model are \href{https://wangwz95.github.io/Documents/Courses' information_Wenzhi-Wang.pdf}{here}.
+
+
+
+
+
+
+\end{document}
